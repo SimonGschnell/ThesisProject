@@ -31,7 +31,7 @@ export default function Scan({getter,setModalVisible,modalVisible}) {
     >
     
          
-         <BarCodeScanner
+    <BarCodeScanner
           style={StyleSheet.absoluteFillObject}
           onBarCodeScanned={getter}
         />
@@ -51,6 +51,12 @@ export default function Scan({getter,setModalVisible,modalVisible}) {
       
     );
   }
+
+  /*
+  <BarCodeScanner
+          style={StyleSheet.absoluteFillObject}
+          onBarCodeScanned={getter}
+        />*/ 
 
   const styles = StyleSheet.create({
     button: {

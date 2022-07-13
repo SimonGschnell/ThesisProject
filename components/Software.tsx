@@ -5,7 +5,7 @@ import {useScan,getScannedData} from "../hooks/useScan.jsx"
 
 export default function Software({navigation,route}) {
     const {test} = route.params
-    const [modalVisible,setModalVisible, data] = useScan(navigation);
+    const [data,setData,modalVisible,setModalVisible] = useScan(navigation);
     return (
       
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

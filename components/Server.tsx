@@ -11,7 +11,7 @@ import {useLayoutEffect, useState} from "react"
 export default function Server({navigation}) {
   
   
-    const [modalVisible,setModalVisible, data] = useScan(navigation);
+  const [data,setData,modalVisible,setModalVisible] = useScan(navigation);
     return (
         <>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

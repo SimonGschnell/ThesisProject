@@ -2,14 +2,17 @@
 import {useState,useLayoutEffect} from "react"
 import {TouchableOpacity,Text} from "react-native"
 
-const getScannedData = ({ type, data }) => {
-    setData({ type, data });
-    setModalVisible(false);
-  };
+let getScannedData;
 
   function useScan(navigation){
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState(null);
+
+    getScannedData = ({ type, data }) => {
+      setData({ type, data });
+      setModalVisible(false);
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
           headerRight: () => (

@@ -1,0 +1,5 @@
+{
+    "tools":["softwareInspection","logInspection","cpuPerformance"],
+    "cards":[{"name":"Hardware-EntryServer", "scanOptions":{"softwareInspection":"blabla","logInspection":"otherbla", "cpuPerformance":"cpublae", "general":"generalbla"}}]
+}
+
