@@ -1,5 +1,5 @@
 import {useLayoutEffect, useState,useEffect} from "react"
-import {View, Text,TouchableOpacity,StyleSheet, Image, StatusBar} from "react-native"
+import {View, Text,TouchableOpacity,StyleSheet, Image, StatusBar,SectionList,ScrollView} from "react-native"
 import QRCode from 'react-native-qrcode-svg';
 import Scan from "./Scan"
 import ActiveStatus from "./ActiveStatus"
@@ -12,12 +12,12 @@ import Hamburger from 'react-native-animated-hamburger';
 let tools = conf.tools;
 let cards = conf.cards;
 
-let getScannedData;
+let getScannedData : (para:object) => void;
 function useScan(){
     const [modalVisible, setModalVisible] = useState(false);
     const [data, setData] = useState(null);
 
-    getScannedData = ({ type, data }) => {
+    getScannedData = ({ type, data }:{type:string, data:string}):void =>  {
       setData({ type, data });
       setModalVisible(false);
     };
@@ -26,7 +26,19 @@ function useScan(){
     return [data,setData,modalVisible,setModalVisible]
 }
 
+//export as standalone component
+function HistoryList({history}:{history:object}){
 
+  return (
+    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+    {Object.keys(history).map((ele)=>
+    <>
+    <Text style={{paddingBottom:15}}>{ele}</Text>
+    {history[ele].map((info)=><Text style={{paddingLeft:15}}>{info}</Text>)}
+    </>)}
+    </ScrollView>
+  )
+}
 
 export default function Main() {
   
@@ -35,18 +47,33 @@ export default function Main() {
     const [toolState, setToolState] = useState(false)
     const [information, setInformation] = useState("")
     const [drawer, setDrawer] = useState(false)
+    const [history, setHistory] = useState({})
+
+    const handleIncomingData = (data,information) =>{
+      let obj = {...history}
+      if (!obj.hasOwnProperty(data)){
+        obj[data] = [information]
+      }else{
+        if(!(obj[data].includes(information))){
+          obj[data].push(information)
+          
+        }
+      }
+      return obj;
+    }
 
     useEffect(() => {
         if(tools.includes(data?.data)){
             setTool(data?.data)
         }
         if(data && !tools.includes(data.data)){
-            console.log(tools)
-            console.log(data.data)
-        const test = cards.find((ele)=> ele.name ==data.data)?.scanOptions
-        const result = tool?  test[tool]: test.general;
+           
+        const options = cards.find((ele)=> ele.name ==data.data)?.scanOptions
+        const result = tool?  options[tool]: options.general;
         setTool(null)
-        setInformation(result)}
+        setInformation(result)
+        setHistory(handleIncomingData(data.data,result))
+      }
         
     },[data])
 
@@ -61,18 +88,22 @@ export default function Main() {
    
     return (
       <>
-      <View style={{marginTop:40, marginLeft:20}}>
-     <Hamburger color="green" size={300}  type="spinCross" active={drawer}  onPress={() => {
-                console.log("hello")
-              setDrawer(!drawer)
-          }}
-          underlayColor="transparent"
-          >
-        </Hamburger>
-        </View>
+     
       <Drawer
+      styles={{
+        drawer: { shadowColor: 'black', shadowOpacity: 0.8, shadowRadius: 6, backgroundColor:"lightgreen"},
+        
+      }}
+      openDrawerOffset={0.2}
+      tweenHandler={(ratio) => ({
+        main: { opacity:(2-ratio)/2 }
+      })}
         open={drawer}
-        content={<Text>asdf</Text>}
+        content={
+        <View style={{flex:1, paddingLeft:30, justifyContent: 'center' }}>
+        <HistoryList history={history}/>
+        </View>
+      }
         >
             
      {toolState? <ActiveStatus status={tool} setStatus={setTool}/>:<></>}
@@ -98,6 +129,7 @@ export default function Main() {
       </View>
     
       <Text>{JSON.stringify(data)}</Text>
+      <Text>{JSON.stringify(history)}</Text>
       <Text>{information}</Text>
       <View style={{flexDirection:"row",gap:500}}><QRCode
         value="softwareInspection"
@@ -116,6 +148,17 @@ export default function Main() {
      
     </View>
     </Drawer>
+    <View style={{position: 'absolute', top: 50, left: 20}}>
+      <TouchableOpacity>
+      <Hamburger color="green"  type="spinCross" active={drawer}  onPress={() => {
+                 console.log("hello")
+               setDrawer(!drawer)
+           }}
+           underlayColor="transparent"
+           >
+         </Hamburger>
+         </TouchableOpacity>
+         </View> 
     </>
       
     );
