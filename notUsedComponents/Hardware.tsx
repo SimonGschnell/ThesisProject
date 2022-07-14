@@ -1,7 +1,7 @@
 import {useLayoutEffect, useState} from "react"
 import {View, Text,TouchableOpacity,StyleSheet} from "react-native"
 import QRCode from 'react-native-qrcode-svg';
-import Scan from "./Scan"
+import Scan from "../components/Scan"
 import Nav from "./Nav"
 import {getScannedData,useScan} from "../hooks/useScan"
 const tool_image = require('../assets/tools.png');

@@ -22,7 +22,7 @@ export default function Scan({getter,setModalVisible,modalVisible}) {
   
       <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={modalVisible}
       onRequestClose={() => {
         alert("Modal has been closed.");
@@ -36,10 +36,10 @@ export default function Scan({getter,setModalVisible,modalVisible}) {
           onBarCodeScanned={getter}
         />
         <TouchableOpacity
-            style={[styles.button, styles.buttonClose, {position:"absolute", width:"100%",bottom:50}]}
+            style={[styles.button, styles.buttonClose, {position:"absolute", width:"100%",bottom:108}]}
             onPress={() => setModalVisible(!modalVisible)}
           >
-            <Text style={styles.textStyle}>Hide Modal</Text>
+            <Text style={styles.textStyle}>Close</Text>
           </TouchableOpacity>
        
       
@@ -66,7 +66,7 @@ export default function Scan({getter,setModalVisible,modalVisible}) {
       },
       
       buttonClose: {
-        backgroundColor: "#2196F3",
+        backgroundColor: "#00BD68",
       },
       textStyle: {
         color: "white",

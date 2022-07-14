@@ -3,6 +3,7 @@ import {View, Text,TouchableOpacity,StyleSheet, Image, StatusBar,SectionList,Scr
 import QRCode from 'react-native-qrcode-svg';
 import Scan from "./Scan"
 import ActiveStatus from "./ActiveStatus"
+import ResultsModal from "./ResultsModal"
 const tool_image = require('../assets/tools.png');
 const star_image = require('../assets/star.png');
 import conf from "../config.json"
@@ -30,12 +31,18 @@ function useScan(){
 function HistoryList({history}:{history:object}){
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-    {Object.keys(history).map((ele)=>
-    <>
-    <Text style={{paddingBottom:15}}>{ele}</Text>
-    {history[ele].map((info)=><Text style={{paddingLeft:15}}>{info}</Text>)}
-    </>)}
+    <ScrollView style={{paddingRight:20}}>
+    {Object.keys(history).map((title)=>
+    <View key={title}>
+    <Text style={{paddingBottom:15, fontWeight: 'bold'}}>{title}</Text>
+    {history[title].map((info)=><><Text style={{paddingLeft:15}}>{info}</Text><View
+  style={{
+    borderBottomColor: 'black',
+    marginLeft:15,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  }}
+/></>)}
+    </View>)}
     </ScrollView>
   )
 }
@@ -48,6 +55,7 @@ export default function Main() {
     const [information, setInformation] = useState("")
     const [drawer, setDrawer] = useState(false)
     const [history, setHistory] = useState({})
+    const [resultsModalVisible,setResultsModalVisible] = useState(false)
 
     const handleIncomingData = (data,information) =>{
       let obj = {...history}
@@ -94,20 +102,20 @@ export default function Main() {
         drawer: { shadowColor: 'black', shadowOpacity: 0.8, shadowRadius: 6, backgroundColor:"lightgreen"},
         
       }}
-      openDrawerOffset={0.2}
+      openDrawerOffset={0.1}
       tweenHandler={(ratio) => ({
         main: { opacity:(2-ratio)/2 }
       })}
         open={drawer}
         content={
-        <View style={{flex:1, paddingLeft:30, justifyContent: 'center' }}>
-        <HistoryList history={history}/>
+        <View style={{flex:1, paddingLeft:30,marginTop:130 }}>
+        {Object.keys(history).length>0?<HistoryList history={history}/>:<Text>Scan cards to gather more information 🔎</Text>}
         </View>
       }
         >
             
      {toolState? <ActiveStatus status={tool} setStatus={setTool}/>:<></>}
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',padding:40 }}>
       
       <Scan getter={getScannedData} modalVisible={modalVisible} setModalVisible={setModalVisible}/> 
    
@@ -121,17 +129,29 @@ export default function Main() {
         style={styles.tinyLogo}
         source={require('../assets/scan.png')} 
       />
-      <Text style={{textAlign: "center",fontWeight:"bold",textDecoration: "underline"}}>Scan</Text>
+      <Text style={{textAlign: "center",fontWeight:"bold"}}>Scan</Text>
             </TouchableOpacity>
-      <View style={{flexDirection:"row"}}>
-      
-      
-      </View>
+
+
+        <TouchableOpacity style={{position:"absolute", bottom:20, left:20}}
+          
+          onPress={() =>   setResultsModalVisible(true)}
+        >
+              
+              <Image
+        style={styles.tinyLogo}
+        source={require('../assets/goal.png')} 
+      />
+      <Text style={{textAlign: "center",fontWeight:"bold"}}>Solve</Text>
+            </TouchableOpacity>
+            <ResultsModal resultsModalVisible={resultsModalVisible} setResultsModalVisible={setResultsModalVisible}/>
+
     
       <Text>{JSON.stringify(data)}</Text>
       <Text>{JSON.stringify(history)}</Text>
       <Text>{information}</Text>
-      <View style={{flexDirection:"row",gap:500}}><QRCode
+      <View style={{flexDirection:"row",gap:500}}>
+        <QRCode
         value="softwareInspection"
         logo={tool_image}
         logoBackgroundColor="white"

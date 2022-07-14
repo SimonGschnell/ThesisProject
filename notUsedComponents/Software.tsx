@@ -1,4 +1,4 @@
-import Scan from "./Scan"
+import Scan from "../components/Scan"
 import Nav from "./Nav"
 import {View, Text,TouchableOpacity,StyleSheet} from "react-native"
 import {useScan,getScannedData} from "../hooks/useScan.jsx"

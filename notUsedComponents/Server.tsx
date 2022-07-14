@@ -1,5 +1,5 @@
 import {useScan,getScannedData} from "../hooks/useScan"
-import Scan from "./Scan"
+import Scan from "../components/Scan"
 import {View, Text} from "react-native"
 
 import Nav from "./Nav"
