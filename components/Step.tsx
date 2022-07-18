@@ -4,7 +4,7 @@ import {View, Text,Modal,Pressable,Alert,StyleSheet,TextInput} from "react-nativ
 import {useEffect, useState} from "react"
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Stepper({handleSubmit,listSize, visible, index, setVisible, state, setState}){
+export default function Stepper({listSize, visible, index, setVisible, state, setState}){
     const [answer,setAnswer] = useState("")
 
     const handleAnswer=(answer) => {
@@ -58,7 +58,7 @@ export default function Stepper({handleSubmit,listSize, visible, index, setVisib
             <Pressable
             // @ts-ignore
             
-              onPress={() => handleSubmit()}
+              onPress={() => setVisible((old:number)=>old+1)}
             >
                
               <Text style={styles.textStyle}>submit</Text>

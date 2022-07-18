@@ -12,6 +12,7 @@ import Hamburger from 'react-native-animated-hamburger';
 
 let tools = conf.tools;
 let cards = conf.cards;
+let start = conf.startingCard;
 
 let getScannedData : (para:object) => void;
 function useScan(){
@@ -57,6 +58,8 @@ export default function Main() {
     const [history, setHistory] = useState({})
     const [resultsModalVisible,setResultsModalVisible] = useState(false)
 
+    const [started, setStarted] = useState(false)
+
     const handleIncomingData = (data,information) =>{
       let obj = {...history}
       if (!obj.hasOwnProperty(data)){
@@ -75,12 +78,16 @@ export default function Main() {
             setTool(data?.data)
         }
         if(data && !tools.includes(data.data)){
-           
+        if(data.data == start){
+          setStarted(true)
+        }
         const options = cards.find((ele)=> ele.name ==data.data)?.scanOptions
         const result = tool?  options[tool]: options.general;
         setTool(null)
         setInformation(result)
-        setHistory(handleIncomingData(data.data,result))
+        if(started){
+          setHistory(handleIncomingData(data.data,result))
+        }
       }
         
     },[data])
@@ -147,22 +154,8 @@ export default function Main() {
             <ResultsModal resultsModalVisible={resultsModalVisible} setResultsModalVisible={setResultsModalVisible}/>
 
     
-      <Text>{JSON.stringify(data)}</Text>
-      <Text>{JSON.stringify(history)}</Text>
-      <Text>{information}</Text>
-      <View style={{flexDirection:"row",gap:500}}>
-        <QRCode
-        value="softwareInspection"
-        logo={tool_image}
-        logoBackgroundColor="white"
-        quietZone={5}
-      />
-      <QRCode
-        value="Hardware-EntryServer"
-        logo={star_image}
-        logoBackgroundColor="white"
-        quietZone={5}
-      /></View>
+      
+      {!started?<Text>Please start with the card: {start}</Text>:<Text>{information}</Text>}
       
        
      

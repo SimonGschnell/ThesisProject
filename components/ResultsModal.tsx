@@ -9,7 +9,7 @@ import Stepper from "./Stepper"
 
 export default function ResultsModal({resultsModalVisible, setResultsModalVisible}) {
   
-
+  const [close,setClose] = useState(true)
   
     return (
         <Modal
@@ -23,17 +23,17 @@ export default function ResultsModal({resultsModalVisible, setResultsModalVisibl
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Pressable
-              style={{position:"absolute",top:10,right:30,padding:20}}
+          {close?<Pressable
+              style={{alignSelf: 'flex-end',marginBottom:10}}
               onPress={() => setResultsModalVisible(!resultsModalVisible)}
             >
               <Image
                 style={styles.verytinyLogo}
                 source={require('../assets/close.png')}
               />
-            </Pressable>
+            </Pressable>:<></>}
 
-            <Stepper/>
+            <Stepper disableClose={setClose}/>
           </View>
         </View>
       </Modal>
@@ -63,7 +63,7 @@ export default function ResultsModal({resultsModalVisible, setResultsModalVisibl
       margin: 0,
       backgroundColor: "white",
       borderRadius: 20,
-      padding: 35,
+      padding: 20,
       alignItems: "center",
       shadowColor: "#000",
       shadowOffset: {

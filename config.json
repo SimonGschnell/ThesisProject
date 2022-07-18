@@ -1,6 +1,17 @@
 {
-    "tools":["softwareInspection","logInspection","cpuPerformance"],
-    "cards":[{"name":"Hardware-EntryServer", "scanOptions":{"softwareInspection":"blabla","logInspection":"otherbla", "cpuPerformance":"cpublae", "general":"generalblageneralblageneralblageneralblageneralblageneralblageneralblageneralblageneralblageneralbla"}}],
-    "solve":[{"question":"testQuestion1","answer":"testAnswer1"},{"question":"testQuestion2","answer":"testAnswer2"}]
+    "startingCard":"Entry Server",
+    "tools":["Software Inspection","Log Inspection","CPU Performance"],
+    "cards":[{"name":"Entry Server", "scanOptions":{"Software Inspection":"Finds Round Robin Router","Log Inspection":"No important logs were found", "CPU Performance":"average", "general":"this is the entry server that routes requests to two different servers"}},
+    {"name":"Web Server A", "scanOptions":{"Software Inspection":"Finds Tomcat A","Log Inspection":"not available", "CPU Performance":"low cpu performance", "general":"This is the web server A"}},
+    {"name":"Web Server B", "scanOptions":{"Software Inspection":"Finds Tomcat B","Log Inspection":"not available", "CPU Performance":"high cpu performance", "general":"This is the web server B"}},
+    {"name":"Database Server", "scanOptions":{"Software Inspection":"Finds postgres","Log Inspection":"Connections only from Web server B !", "CPU Performance":"average CPU performance", "general":"this is the database server for Webserver A and B"}},
+    {"name":"Round Robin Router", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"Finds Routing Configuration file", "CPU Performance":"not available", "general":"This router redirects requests to webservers"}},
+    {"name":"Routing config-file", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"not available", "CPU Performance":"not available", "general":"Finds Web Server A and B"}},
+    {"name":"Tomcat A", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"no requests to Webserver A are logged, finds Database Config File A", "CPU Performance":"very low CPU performance", "general":"this is the tomcat server that handles the requests for webserver A"}},
+    {"name":"Tomcat B", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"lots of requests are logged from the entry server, finds the Database Config File B", "CPU Performance":"high CPU performance", "general":"this is the tomcat server that handles the requests for the webserver B"}},
+    {"name":"Postgres", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"nothing found", "CPU Performance":"average CPU performance", "general":"Postgres server that manages the database"}},
+    {"name":"Database config-file A", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"Finds Database Server", "CPU Performance":"not available", "general":"Finds Database Server"}},
+    {"name":"Database config-file B", "scanOptions":{"Software Inspection":"nothing found","Log Inspection":"Finds Database Server", "CPU Performance":"not available", "general":"Finds Database Server"}}],
+    "solve":[{"question":"Which server is overloaded?","answer":"Web Server B"},{"question":"Which server has no load?","answer":"Web Server A"},{"question":"Where is the mistake?","answer":"Routing Configuration file"}]
 }
 
