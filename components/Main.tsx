@@ -53,7 +53,7 @@ export default function Main() {
     const [data,setData,modalVisible,setModalVisible] = useScan();
     const [tool, setTool] = useState(null)
     const [toolState, setToolState] = useState(false)
-    const [information, setInformation] = useState("")
+    const [information, setInformation] = useState([])
     const [drawer, setDrawer] = useState(false)
     const [history, setHistory] = useState({})
     const [resultsModalVisible,setResultsModalVisible] = useState(false)
@@ -63,30 +63,39 @@ export default function Main() {
     const handleIncomingData = (data,information) =>{
       let obj = {...history}
       if (!obj.hasOwnProperty(data)){
-        obj[data] = [information]
+        obj[data] = [...information]
       }else{
-        if(!(obj[data].includes(information))){
-          obj[data].push(information)
+        
+          information.forEach((ele)=> {if(!(obj[data].includes(ele))){obj[data].push(ele)}})
           
-        }
+          
+        
       }
       return obj;
     }
 
+    //also add the starting card information in the history
+    useEffect(() => {
+      if(started){
+
+      }
+    },[started])
+
     useEffect(() => {
         if(tools.includes(data?.data)){
             setTool(data?.data)
-        }
+        }  
         if(data && !tools.includes(data.data)){
         if(data.data == start){
           setStarted(true)
         }
         const options = cards.find((ele)=> ele.name ==data.data)?.scanOptions
-        const result = tool?  options[tool]: options.general;
+        let result = tool?  options[tool]: options.general;
         setTool(null)
+        Array.isArray(result)? null : result = [result]
         setInformation(result)
         if(started){
-          setHistory(handleIncomingData(data.data,result))
+          setHistory(handleIncomingData(data.data,result.filter((ele)=>typeof ele == "string")))
         }
       }
         
@@ -154,8 +163,17 @@ export default function Main() {
             <ResultsModal resultsModalVisible={resultsModalVisible} setResultsModalVisible={setResultsModalVisible}/>
 
     
+    
+      {!started?<Text>Please start with the card: {start}</Text>:
       
-      {!started?<Text>Please start with the card: {start}</Text>:<Text>{information}</Text>}
+       information.map((ele)=> {
+        
+          return !isNaN(ele)? <Text style={{color:"lightsalmon"}}>You found card number <Text style={{fontWeight:"bold", fontSize:17}}>{ele}</Text></Text>: <Text style={{color:"darkcyan"}}>{ele}</Text>
+        
+      })
+      
+      
+      }
       
        
      
