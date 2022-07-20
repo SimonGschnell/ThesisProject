@@ -77,9 +77,21 @@ export default function Main() {
     //also add the starting card information in the history
     useEffect(() => {
       if(started){
-
+        let result = getInformation(data)
+        setHistory(handleIncomingData(data.data,result.filter((ele)=>typeof ele == "string")))
       }
     },[started])
+
+    const getInformation=(data)=>{
+
+      const options = cards.find((ele)=> ele.name ==data.data)?.scanOptions
+      let result = tool?  options[tool]: options.general;
+      setTool(null)
+      Array.isArray(result)? null : result = [result]
+
+      return result
+    }
+    
 
     useEffect(() => {
         if(tools.includes(data?.data)){
@@ -89,10 +101,7 @@ export default function Main() {
         if(data.data == start){
           setStarted(true)
         }
-        const options = cards.find((ele)=> ele.name ==data.data)?.scanOptions
-        let result = tool?  options[tool]: options.general;
-        setTool(null)
-        Array.isArray(result)? null : result = [result]
+        let result = getInformation(data)
         setInformation(result)
         if(started){
           setHistory(handleIncomingData(data.data,result.filter((ele)=>typeof ele == "string")))
@@ -112,7 +121,6 @@ export default function Main() {
    
     return (
       <>
-     
       <Drawer
       styles={{
         drawer: { shadowColor: 'black', shadowOpacity: 0.8, shadowRadius: 6, backgroundColor:"lightgreen"},
